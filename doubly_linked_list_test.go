@@ -1,21 +1,61 @@
 package linkedlist
 
 import (
+	"errors"
 	"testing"
 )
 
 func TestCount(t *testing.T) {
-	// packedArr := "oNe \\seven\\tWo, tHree, fOur,oNe \\seven\\tWo,   seven  tHree, fOur,//six nine, two, three-foUr/seven/, nine.../seven///eight//'.four'" +
-	// 	" nine.nine.nine.nine.nine//nine eight//. eight  seven six five oNe \\\\tWo, tHree, fOur/seven/six nine.,;',nine three'/seven///eight//>/seven/'.four123nine" +
-	// 	"//eight////eight//six five five;five//eight//eight//;<>0]1354six//.six['six///eight//five';five]]['six*five//eight,cat,cat,... dog some more random words lorem ipsum"
-	// UnpackedArr := []string{"nine", "eight", "seven", "six", "five", "four", "three", "two", "one", "cat"}
-	// data, err := Do(&packedArr)
-	// for i, str := range UnpackedArr {
-	// 	if data[i] != str {
-	// 		t.Errorf("Unexpected result while string unpacking \nExpected:%s \nReceived:%s", UnpackedArr, data)
-	// 	}
-	// 	if err != nil {
-	// 		t.Errorf("Unexpected result while string unpacking \n%s", err)
-	// 	}
-	// }
+	newList := List{}
+	err := error(nil)
+	slice := newList.ToSlice()
+	targetSlice := []interface{}{}
+	for i, elem := range targetSlice {
+		if elem != slice[i] {
+			err = errors.New("Expected and recieved list are different")
+		}
+	}
+	newList.PushFront("third")
+	newList.PushFront("second")
+	newList.PushFront("first")
+	newList.PushBack("fourth")
+	newList.PushBack("fifth")
+	newList.PushBack("last")
+	slice = newList.ToSlice()
+	targetSlice = []interface{}{"first", "second", "third", "fourth", "fifth", "last"}
+	for i, elem := range targetSlice {
+		if elem != slice[i] {
+			err = errors.New("Expected and recieved list are different")
+		}
+	}
+
+	if err != nil {
+		t.Errorf("\n\t%s", err)
+	} else {
+		newList.Remove(*newList.First().Prev().Prev().Next().Next().Next().Next().Prev().Prev().Next().Next())
+		slice = newList.ToSlice()
+		targetSlice = []interface{}{"first", "second", "third", "fourth", "last"}
+		for i, elem := range targetSlice {
+			if elem != slice[i] {
+				err = errors.New("Expected and recieved list are different")
+			}
+		}
+	}
+
+	if err != nil {
+		t.Errorf("\n\t%s", err)
+	} else {
+		newList.Remove(*newList.Last())
+		slice = newList.ToSlice()
+		targetSlice = []interface{}{"first", "second", "third", "fourth"}
+		for i, elem := range targetSlice {
+			if elem != slice[i] {
+				err = errors.New("Expected and recieved list are different")
+			}
+		}
+	}
+
+	if newList.First().Next().Value() != "second" {
+		t.Errorf("\n\t%s", "Wrong value")
+	}
 }
